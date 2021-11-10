@@ -1,5 +1,6 @@
+using CollectiveMass.ImageTracerUnity;
 using UnityEngine;
-using ImageTracerUnity;
+using Unity.VectorGraphics;
 using System.IO;
 
 public class SceneController : MonoBehaviour
@@ -7,11 +8,18 @@ public class SceneController : MonoBehaviour
 
     public Texture2D texture;
 
+    public Material startMaterial;
+    public Material blurMaterial;
 
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         Options options = new Options();
+
+        startMaterial.mainTexture = texture;
+
+        Texture2D blurTexture = ImageTracer.Blur(texture, options.Blur.BlurRadius, options.Blur.BlurDelta);
+        blurMaterial.mainTexture = blurTexture;
 
         string svgData = ImageTracer.ImageToSvg(texture, options);
 
@@ -21,5 +29,13 @@ public class SceneController : MonoBehaviour
 
         Debug.Log($"Done: {path}");
 
+
+
+        //StringReader svgDataReader = new StringReader(svgData);
+        //SVGParser.SceneInfo svgScene = SVGParser.ImportSVG(svgDataReader,
+        //    0F, 1F,
+        //    100, 100, false);
+
+        //svgDataReader.Close();
     }
 }

@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "collectivemass.imagetracerunity": {
+      "version": "file:collectivemass.imagetracerunity",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 1,

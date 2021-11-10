@@ -1,0 +1,14 @@
+{
+  "name": "collectivemass.imagetracerunity",
+  "displayName": "ImageTracer for Unity",
+  "version": "1.0.0",
+  "unity": "2020.3",
+  "description": "A port of ImageTracer to Unity. Converts raster images to SVG verctor.",
+  "keywords": [
+    "ImageTracer",
+    "SVG"
+  ],
+  "category": "Image Tools",
+  "type": "library",
+  "hideInEditor": false
+}
