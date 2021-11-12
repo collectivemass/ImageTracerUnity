@@ -13,9 +13,9 @@ namespace CollectiveMass.ImageTracerUnity.Svg
         public static string ToSvgString(this TracedImage image, SvgRendering options)
         {
             // SVG start
-            var scaledWidth = (int)(image.Width * options.Scale);
-            var scaledHeight = (int)(image.Height * options.Scale);
-            var viewBoxOrViewPort = options.Viewbox ?
+            var scaledWidth = (int)(image.Width * options.scale);
+            var scaledHeight = (int)(image.Height * options.scale);
+            var viewBoxOrViewPort = options.viewbox ?
                 $"viewBox=\"0 0 {scaledWidth} {scaledHeight}\"" :
                 $"width=\"{scaledWidth}\" height=\"{scaledHeight}\"";
 
@@ -28,12 +28,12 @@ namespace CollectiveMass.ImageTracerUnity.Svg
                 {
                     var firstSegmentStart = p.Segments.First().Start;
                     var label = firstSegmentStart.Y * scaledWidth + firstSegmentStart.X;
-                    return new ZPosition { Label = label, Color = cs.Key, Path = p };
-                })).OrderBy(z => z.Label)
+                    return new ZPosition { label = label, color = cs.Key, path = p };
+                })).OrderBy(z => z.label)
                 .Aggregate(stringBuilder, (sb, z) =>
                 {
-                    var scaledSegments = z.Path.Segments.Select(s => s.Scale(options.Scale)).ToList();
-                    return AppendSegments(sb, scaledSegments, z.Color);
+                    var scaledSegments = z.path.Segments.Select(s => s.Scale(options.scale)).ToList();
+                    return AppendSegments(sb, scaledSegments, z.color);
                 }).Append("</svg>").ToString();
         }
 
@@ -41,7 +41,7 @@ namespace CollectiveMass.ImageTracerUnity.Svg
         internal static StringBuilder AppendSegments(StringBuilder stringBuilder, IReadOnlyList<Segment> segments, ColorReference color)
         {
             // Path
-            stringBuilder.Append($"<path {color.ToSvgString()}d=\"M {segments.First().Start.X} {segments.First().Start.Y} ");
+            stringBuilder.Append($"<path {ColorUtils.ToSvgString(color.Color)}d=\"M {segments.First().Start.X} {segments.First().Start.Y} ");
             //http://stackoverflow.com/a/217814/294804
             segments.Aggregate(stringBuilder, (sb, segment) => sb.Append(segment.ToPathString())).Append("Z\" />");
 

@@ -8,10 +8,10 @@ namespace CollectiveMass.ImageTracerUnity
     [Serializable]
     public class Options
     {
-        public Tracing Tracing { get; set; } = new Tracing();
-        public ColorQuantization ColorQuantization { get; set; } = new ColorQuantization();
-        public SvgRendering SvgRendering { get; set; } = new SvgRendering();
-        public Blur Blur { get; set; } = new Blur();
+        public Tracing tracing = new Tracing();
+        public ColorQuantization colorQuantization = new ColorQuantization();
+        public SvgRendering svgRendering = new SvgRendering();
+        public Blur blur = new Blur();
 
         public void SetOptionByName(string optionName, object value)
         {
@@ -25,7 +25,7 @@ namespace CollectiveMass.ImageTracerUnity
 
         private object GetOptionTypeFromName(string optionName)
         {
-            object[] options = {Tracing, ColorQuantization, SvgRendering, Blur};
+            object[] options = {tracing, colorQuantization, svgRendering, blur};
             return options.Single(o => o.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Any(i => String.Equals(i.Name, optionName, StringComparison.CurrentCultureIgnoreCase)));
         }
     }

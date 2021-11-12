@@ -6,19 +6,23 @@ using System.IO;
 public class SceneController : MonoBehaviour
 {
 
+    public Options options = new Options();
     public Texture2D texture;
 
     public Material startMaterial;
     public Material blurMaterial;
 
 
-    private void Start()
+    private void Awake()
     {
-        Options options = new Options();
-
         startMaterial.mainTexture = texture;
+    }
 
-        Texture2D blurTexture = ImageTracer.Blur(texture, options.Blur.BlurRadius, options.Blur.BlurDelta);
+    public void Generate() {
+
+        Debug.Log($"Starting");
+
+        Texture2D blurTexture = TextureUtils.SelectiveGaussianBlur(texture, options.blur.blurRadius, options.blur.blurDelta);
         blurMaterial.mainTexture = blurTexture;
 
         string svgData = ImageTracer.ImageToSvg(texture, options);
@@ -30,7 +34,9 @@ public class SceneController : MonoBehaviour
         Debug.Log($"Done: {path}");
 
 
-
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.Refresh();
+#endif
         //StringReader svgDataReader = new StringReader(svgData);
         //SVGParser.SceneInfo svgScene = SVGParser.ImportSVG(svgDataReader,
         //    0F, 1F,

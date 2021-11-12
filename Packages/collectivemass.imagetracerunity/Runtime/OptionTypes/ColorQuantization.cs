@@ -5,9 +5,9 @@ namespace CollectiveMass.ImageTracerUnity.OptionTypes
     [Serializable]
     public class ColorQuantization
     {
-        public double ColorSampling { get; set; } = 1f;
-        public int NumberOfColors { get; set; } = 16;
-        public double MinColorRatio { get; set; } = .02f;
-        public int ColorQuantCycles { get; set; } = 3;
+        public double colorSampling = 1f;
+        public int numberOfColors = 16;
+        public double minColorRatio = 0.02f;
+        public int colorQuantCycles = 3;
     }
 }

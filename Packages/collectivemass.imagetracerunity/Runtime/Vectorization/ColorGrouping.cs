@@ -51,85 +51,25 @@ namespace CollectiveMass.ImageTracerUnity.Vectorization
         public static IEnumerable<ColorGroup> Convert(IEnumerable<ColorReference> colors, int width, int height, IReadOnlyList<ColorReference> palette)
         {
             // Indexed color array requires +2 to the original width and height
-            var paddedWidth = width + 2;
-            var paddedHeight = height + 2;
+            int paddedWidth = width + 2;
+            int paddedHeight = height + 2;
+
             var imageColorQueue = new Queue<ColorReference>(colors.AsParallel()
                 .AsOrdered()
-                .Select(c => c.FindClosest(palette)));
+                .Select(c => ColorUtils.FindClosest(c.Color, palette)));
 
             var colorMatrix = CreatePaddedColorMatrix(paddedWidth, paddedHeight)
                 .SelectMany(c => c)
                 .Select(c => c ?? imageColorQueue.Dequeue())
                 .ToList();
-            for (var row = 1; row < paddedHeight - 1; row++)
+
+            for (int row = 1; row < paddedHeight - 1; row++)
             {
-                for (var column = 1; column < paddedWidth - 1; column++)
+                for (int column = 1; column < paddedWidth - 1; column++)
                 {
                     yield return new ColorGroup(colorMatrix, row, column, paddedWidth);
                 }
             }
         }
-
-        // THIS IS NOW UNUSED
-        // 1. Color quantization repeated "cycles" times, based on K-means clustering
-        // https://en.wikipedia.org/wiki/Color_quantization
-        // https://en.wikipedia.org/wiki/K-means_clustering
-        //private static PaddedPaletteImage ColorQuantization(ImageData imageData, Color[] colorPalette, Options options)
-        //{
-        //    var arr = CreateIndexedColorArray(imageData.Height, imageData.Width);
-        //    // Repeat clustering step "cycles" times
-        //    for (var cycleCount = 0; cycleCount < options.ColorQuantization.ColorQuantCycles; cycleCount++)
-        //    {
-        //        // Reseting palette accumulator for averaging
-        //        var accumulatorPaletteIndexer = Enumerable.Range(0, colorPalette.Length).ToDictionary(i => i, i => new PaletteAccumulator());
-
-        //        for (var j = 0; j < imageData.Height; j++)
-        //        {
-        //            for (var i = 0; i < imageData.Width; i++)
-        //            {
-        //                var pixel = imageData.Colors[j * imageData.Width + i];
-        //                var distance = 256 * 4;
-        //                var paletteIndex = 0;
-        //                // find closest color from palette by measuring (rectilinear) color distance between this pixel and all palette colors
-        //                for (var k = 0; k < colorPalette.Length; k++)
-        //                {
-        //                    var color = colorPalette[k];
-        //                    // In my experience, https://en.wikipedia.org/wiki/Rectilinear_distance works better than https://en.wikipedia.org/wiki/Euclidean_distance
-        //                    var newDistance = color.CalculateRectilinearDistance(pixel);
-
-        //                    if (newDistance >= distance) continue;
-
-        //                    distance = newDistance;
-        //                    paletteIndex = k;
-        //                }
-
-        //                // add to palettacc
-        //                accumulatorPaletteIndexer[paletteIndex].Accumulate(pixel);
-        //                arr[j + 1][i + 1] = paletteIndex;
-        //            }
-        //        }
-
-        //        // averaging paletteacc for palette
-        //        for (var k = 0; k < colorPalette.Length; k++)
-        //        {
-        //            // averaging
-        //            if (accumulatorPaletteIndexer[k].A > 0) // Non-transparent accumulation
-        //            {
-        //                colorPalette[k] = accumulatorPaletteIndexer[k].CalculateAverage();
-        //            }
-
-        //            //https://github.com/jankovicsandras/imagetracerjava/issues/2
-        //            // Randomizing a color, if there are too few pixels and there will be a new cycle
-        //            if (cycleCount >= options.ColorQuantization.ColorQuantCycles - 1) continue;
-        //            var ratio = accumulatorPaletteIndexer[k].Count / (double)(imageData.Width * imageData.Height);
-        //            if ((ratio < options.ColorQuantization.MinColorRatio) && (cycleCount < options.ColorQuantization.ColorQuantCycles - 1))
-        //            {
-        //                colorPalette[k] = ColorExtensions.RandomColor();
-        //            }
-        //        }
-        //    }
-
-        //    return new PaddedPaletteImage(arr, colorPalette);
-        //}
     }
 }

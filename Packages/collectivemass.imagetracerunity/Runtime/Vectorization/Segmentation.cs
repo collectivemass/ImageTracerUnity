@@ -25,7 +25,7 @@ namespace CollectiveMass.ImageTracerUnity.Vectorization
             sequenceLength += sequenceLength < 0 ? pathLength : 0;
 
             int errorIndex;
-            var lineResult = LineSegment.Fit(path, tracing.LTres, sequence, sequenceLength, out errorIndex, rendering);
+            var lineResult = LineSegment.Fit(path, tracing.lineThreshold, sequence, sequenceLength, out errorIndex, rendering);
             if (lineResult != null)
             {
                 yield return lineResult;
@@ -34,7 +34,7 @@ namespace CollectiveMass.ImageTracerUnity.Vectorization
 
             // 5.3. If the straight line fails (an error>ltreshold), find the point with the biggest error
             var fitIndex = errorIndex;
-            var splineResult = SplineSegment.Fit(path, tracing.QTres, sequence, sequenceLength, ref errorIndex, rendering);
+            var splineResult = SplineSegment.Fit(path, tracing.quadraticSplineThreshold, sequence, sequenceLength, ref errorIndex, rendering);
             if (splineResult != null)
             {
                 yield return splineResult;

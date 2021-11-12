@@ -5,6 +5,7 @@ namespace CollectiveMass.ImageTracerUnity.Vectorization
 {
     internal class ColorGroup : Point<int>
     {
+
         public ColorReference TopLeft { get; }
         public ColorReference TopMid { get; }
         public ColorReference TopRight { get; }

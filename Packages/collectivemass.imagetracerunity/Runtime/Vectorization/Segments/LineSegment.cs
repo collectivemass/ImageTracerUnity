@@ -45,7 +45,7 @@ namespace CollectiveMass.ImageTracerUnity.Vectorization.Segments
             var isLine = Fit(i => path[i], i => CreateLinePoint(pseudoIndexCalc(i), startPoint, partialPoint), threshold,
                 (sequence.Start + 1) % pathLength, i => i != sequence.End, i => (i + 1) % pathLength, ref errorIndex);
 
-            return isLine ? new LineSegment { Start = startPoint, End = endPoint, Radius = rendering.LCpr, RoundDecimalPlaces = rendering.RoundCoords } : null;
+            return isLine ? new LineSegment { Start = startPoint, End = endPoint, Radius = rendering.linearControlPointRadius, RoundDecimalPlaces = rendering.roundCoords } : null;
         }
 
         public override string ToPathString()

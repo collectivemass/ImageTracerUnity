@@ -50,7 +50,7 @@ namespace CollectiveMass.ImageTracerUnity.Vectorization.Segments
             var isSpline = Fit(i => path[i], i => CreateSplinePoint(pseudoIndexCalc(i), startPoint, midPoint, endPoint), threshold,
                 sequence.Start + 1, i => i != sequence.End, i => (i + 1) % path.Count, ref errorIndex);
 
-            return isSpline ? new SplineSegment { Start = startPoint, Mid = midPoint, End = endPoint, Radius = rendering.QCpr, RoundDecimalPlaces = rendering.RoundCoords } : null;
+            return isSpline ? new SplineSegment { Start = startPoint, Mid = midPoint, End = endPoint, Radius = rendering.quadraticControlPointRadius, RoundDecimalPlaces = rendering.roundCoords } : null;
         }
 
         public override Segment Scale(double scale)
